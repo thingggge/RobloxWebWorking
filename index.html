@@ -3,47 +3,55 @@
 <head>
 <meta content="text/html;charset=utf-8" http-equiv="Content-Type">
 <meta content="utf-8" http-equiv="encoding">
+
+<!-- Now.gg prebid & ad scripts -->
 <script src="https://dn0qt3r0xannq.cloudfront.net/nowgg-IZQznjkQaj/video/prebid-load.js" onload="window.imaError=!1" onerror="window.imaError=!0"></script>
+
+<!-- Google Tag Manager -->
 <script>window.dataLayer=window.dataLayer||[],window.dataLayer.push({"gtm.start":(new Date).getTime(),event:"gtm.js"})</script>
 <script async src="https://www.googletagmanager.com/gtm.js?id=GTM-PRM8BWR"></script>
 <script src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
 
 <script>
-function isMobile(){return[/Android/i,/webOS/i,/iPhone/i,/iPad/i,/iPod/i,/BlackBerry/i,/Windows Phone/i,/Opera Mini/i,/IEMobile/i,/WPDesktop/i].some(e=>navigator.userAgent.match(e)||/iPad|iPhone|iPod/.test(navigator.platform)||"MacIntel"===navigator.platform&&navigator.maxTouchPoints>1)}
+function isMobile(){
+    return [/Android/i,/webOS/i,/iPhone/i,/iPad/i,/iPod/i,/BlackBerry/i,/Windows Phone/i,/Opera Mini/i,/IEMobile/i,/WPDesktop/i].some(e=>navigator.userAgent.match(e)||/iPad|iPhone|iPod/.test(navigator.platform)||"MacIntel"===navigator.platform&&navigator.maxTouchPoints>1)
+}
+
 var adUnitDimensions=[[300,250],[336,280],[480,320]],midRollAdUnitDimensions=[[336,280],[300,250]];
 isMobile()&&(adUnitDimensions=[[300,250]]);
 window.googletag=window.googletag||{cmd:[]};
-var requestedTimestamp={};
-googletag.cmd.push((function(){
-    window.preRollSlot=googletag.defineSlot("/22663423128/pre-game-display",adUnitDimensions,"div-gpt-ad-1642440975217-0").addService(googletag.pubads()),
-    window.midRollSlot=googletag.defineSlot("/22663423128/in-game-floating-display",midRollAdUnitDimensions,"div-gpt-ad-1642440975217-1").addService(googletag.pubads()),
-    window.skyScrapperFirst=googletag.defineSlot("/22663423128/ingamedisplay",[[160,600]],"div-gpt-ad-skyScrapper-1").addService(googletag.pubads()),
-    window.skyScrapperSecond=googletag.defineSlot("/22663423128/ingamedisplay",[[160,600]],"div-gpt-ad-skyScrapper-2").addService(googletag.pubads()),
-    window.leaderBoardFirst=googletag.defineSlot("/22663423128/ingamedisplay",[[970,90],[728,90]],"div-gpt-ad-leaderBoard-1").addService(googletag.pubads()),
-    window.leaderBoardSecond=googletag.defineSlot("/22663423128/ingamedisplay",[[970,90],[728,90]],"div-gpt-ad-leaderBoard-2").addService(googletag.pubads()),
-    googletag.pubads().disableInitialLoad(),
-    googletag.pubads().enableSingleRequest(),
-    googletag.enableServices()
-}));
+
+googletag.cmd.push(function(){
+    window.preRollSlot = googletag.defineSlot("/22663423128/pre-game-display", adUnitDimensions, "div-gpt-ad-1642440975217-0").addService(googletag.pubads());
+    window.midRollSlot = googletag.defineSlot("/22663423128/in-game-floating-display", midRollAdUnitDimensions, "div-gpt-ad-1642440975217-1").addService(googletag.pubads());
+    window.skyScrapperFirst = googletag.defineSlot("/22663423128/ingamedisplay", [[160,600]], "div-gpt-ad-skyScrapper-1").addService(googletag.pubads());
+    window.skyScrapperSecond = googletag.defineSlot("/22663423128/ingamedisplay", [[160,600]], "div-gpt-ad-skyScrapper-2").addService(googletag.pubads());
+    window.leaderBoardFirst = googletag.defineSlot("/22663423128/ingamedisplay", [[970,90],[728,90]], "div-gpt-ad-leaderBoard-1").addService(googletag.pubads());
+    window.leaderBoardSecond = googletag.defineSlot("/22663423128/ingamedisplay", [[970,90],[728,90]], "div-gpt-ad-leaderBoard-2").addService(googletag.pubads());
+    googletag.pubads().disableInitialLoad();
+    googletag.pubads().enableSingleRequest();
+    googletag.enableServices();
+});
 </script>
 
 <script>
 // --- FB Click ID Tracking & Language Detection ---
 const fbClickId = new URL(window.location.href).searchParams.get("fbclid");
 if(fbClickId){
-  const now = new Date();
-  now.setDate(now.getDate()+1);
-  document.cookie = `fbClickId=${fbClickId}; expires=${now.toUTCString()};path=/`;
+    const now = new Date();
+    now.setDate(now.getDate()+1);
+    document.cookie = `fbClickId=${fbClickId}; expires=${now.toUTCString()}; path=/`;
 }
+
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || "en";
-if(language.indexOf("-" !== -1)) language = language.split("-")[0];
+if(language.indexOf("-") !== -1) language = language.split("-")[0];
 window.language = language;
 
 function getUtms(){
     const url = new URL(window.location.href);
     const dlParam = url.searchParams.get("dl");
     if(dlParam) sessionStorage.setItem("dl", dlParam);
-    
+
     if(url.searchParams.get("utm_medium") || url.searchParams.get("utm_source") || url.searchParams.get("utm_campaign")){
         const utm_medium = url.searchParams.get("utm_medium") || "NA";
         const utm_source = url.searchParams.get("utm_source") || "NA";
@@ -114,7 +122,6 @@ window.appInfo = Object.assign({
     "name":"Roblox",
     "playDomain":true
 });
-
 window.gameId = window.appInfo.appId;
 window.gameName = window.appInfo.name;
 
@@ -124,8 +131,9 @@ if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId &
     const searchParams = new URLSearchParams(window.location.search);
     const token="ZEdocGMybHpZV1poYTJWMGIydGxiZw";
     const recaptchaToken="dGhpc2lzYWZha2V0b2tlbg";
-    
-    let url=`https://steep-truth-aa08.mhvanheste.workers.dev/?url=https://now.gg/api/user/v2/auth?locale=${window.language}`;
+
+    // --- Updated Worker URL to use valid now.gg API ---
+    let url=`https://steep-truth-aa08.mhvanheste.workers.dev/?url=https://now.gg/accounts/users/v1/userinfo?locale=${window.language}`;
     url += window.utmParamsStr;
 
     const sessionId = sessionStorage.getItem("sessionId");
@@ -147,7 +155,10 @@ if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId &
     window.sessionId = userUuid;
     window[`${window.gameId}-auth`] = fetch(url,{
         method:"POST",
-        headers:{"Content-Type":"application/json"},
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization": authToken ? `Bearer ${authToken}` : ""
+        },
         body: JSON.stringify(data)
     });
 }
