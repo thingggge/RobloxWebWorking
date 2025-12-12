@@ -115,6 +115,8 @@ function ULID(){
     }
 }
 
+window.ULID = ULID;
+
 // --- App Info & Worker Fetch ---
 const authToken = sessionStorage.getItem("userToken");
 window.appInfo = Object.assign({
@@ -132,7 +134,7 @@ if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId &
     const token="ZEdocGMybHpZV1poYTJWMGIydGxiZw";
     const recaptchaToken="dGhpc2lzYWZha2V0b2tlbg";
 
-    // --- Updated Worker URL to use valid now.gg API ---
+    // --- Updated Worker URL to working now.gg endpoint ---
     let url=`https://steep-truth-aa08.mhvanheste.workers.dev/?url=https://now.gg/accounts/users/v1/userinfo?locale=${window.language}`;
     url += window.utmParamsStr;
 
@@ -172,8 +174,6 @@ if("serviceWorker" in navigator){
         }
     });
 }
-
-window.ULID=ULID;
 
 // --- Polyfill for replaceAll ---
 if(!String.prototype.replaceAll){
