@@ -73,7 +73,6 @@ function getUtms(){
     sessionStorage.removeItem("utm_campaign");
     return dlParam ? `&dl=${dlParam}` : "";
 }
-
 window.utmParamsStr = getUtms();
 
 // --- ULID Generator ---
@@ -84,7 +83,6 @@ function ULID(){
     const time = new DataView(ulid.buffer,0,6);
     const rand = new Uint8Array(ulid.buffer,6,10);
     const dest = new Array(26);
-
     function encode(ulid){
         dest[0]=BASE32[ulid[0]>>5];
         dest[1]=BASE32[ulid[0]&0x1f];
@@ -100,7 +98,6 @@ function ULID(){
         }
         return dest.join("");
     }
-
     return function(){
         const now = Date.now();
         if(now===last){
@@ -114,7 +111,6 @@ function ULID(){
         return encode(ulid);
     }
 }
-
 window.ULID = ULID;
 
 // --- App Info & Worker Fetch ---
@@ -126,7 +122,6 @@ window.appInfo = Object.assign({
 });
 window.gameId = window.appInfo.appId;
 window.gameName = window.appInfo.name;
-
 const appCampaignData = JSON.parse(sessionStorage.getItem("campaignData")||"{}");
 
 if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId && authToken)){
@@ -198,6 +193,12 @@ if(!String.prototype.replaceAll){
 <div class="app">
     <div class="snackbar"></div>
     <div id="loader"><img class="loaderImage" alt="loaderImg" src="play/images/loader.svg"/></div>
+
+    <!-- Dummy elements to prevent JS crashes -->
+    <div id="game-container"></div>
+    <div id="ad-slot-top"></div>
+    <div id="ad-slot-bottom"></div>
+    <div id="in-game-ui"></div>
 </div>
 
 <!-- Favicon & logo -->
