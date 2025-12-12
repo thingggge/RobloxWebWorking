@@ -17,7 +17,7 @@ function isMobile(){
     return [/Android/i,/webOS/i,/iPhone/i,/iPad/i,/iPod/i,/BlackBerry/i,/Windows Phone/i,/Opera Mini/i,/IEMobile/i,/WPDesktop/i].some(e=>navigator.userAgent.match(e)||/iPad|iPhone|iPod/.test(navigator.platform)||"MacIntel"===navigator.platform&&navigator.maxTouchPoints>1)
 }
 
-var adUnitDimensions=[[300,250],[336,280],[480,320]],midRollAdUnitDimensions=[[336,280],[300,250]];
+var adUnitDimensions=[[300,250],[336,280],[480,320]],midRollAdUnitDimensions=[[336,280],[300,250]]; 
 isMobile()&&(adUnitDimensions=[[300,250]]);
 window.googletag=window.googletag||{cmd:[]};
 
@@ -35,7 +35,7 @@ googletag.cmd.push(function(){
 </script>
 
 <script>
-// --- FB Click ID Tracking & Language Detection ---
+// FB Click ID & Language Detection
 const fbClickId = new URL(window.location.href).searchParams.get("fbclid");
 if(fbClickId){
     const now = new Date();
@@ -47,6 +47,7 @@ let language = (navigator.languages && navigator.languages[0]) || navigator.lang
 if(language.indexOf("-") !== -1) language = language.split("-")[0];
 window.language = language;
 
+// UTM Handling
 function getUtms(){
     const url = new URL(window.location.href);
     const dlParam = url.searchParams.get("dl");
@@ -73,9 +74,10 @@ function getUtms(){
     sessionStorage.removeItem("utm_campaign");
     return dlParam ? `&dl=${dlParam}` : "";
 }
+
 window.utmParamsStr = getUtms();
 
-// --- ULID Generator ---
+// ULID Generator
 function ULID(){
     const BASE32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ".split("");
     let last = -1;
@@ -83,6 +85,7 @@ function ULID(){
     const time = new DataView(ulid.buffer,0,6);
     const rand = new Uint8Array(ulid.buffer,6,10);
     const dest = new Array(26);
+
     function encode(ulid){
         dest[0]=BASE32[ulid[0]>>5];
         dest[1]=BASE32[ulid[0]&0x1f];
@@ -98,6 +101,7 @@ function ULID(){
         }
         return dest.join("");
     }
+
     return function(){
         const now = Date.now();
         if(now===last){
@@ -111,17 +115,21 @@ function ULID(){
         return encode(ulid);
     }
 }
+
 window.ULID = ULID;
 
-// --- App Info & Worker Fetch ---
+// Worker/Auth Fetch
 const authToken = sessionStorage.getItem("userToken");
-window.appInfo = Object.assign({
-    "appId":"5349",
-    "name":"Roblox",
-    "playDomain":true
-});
+
+window.appInfo = {
+    appId: "5349",
+    name: "Roblox",
+    playDomain: true
+};
+
 window.gameId = window.appInfo.appId;
 window.gameName = window.appInfo.name;
+
 const appCampaignData = JSON.parse(sessionStorage.getItem("campaignData")||"{}");
 
 if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId && authToken)){
@@ -129,7 +137,6 @@ if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId &
     const token="ZEdocGMybHpZV1poYTJWMGIydGxiZw";
     const recaptchaToken="dGhpc2lzYWZha2V0b2tlbg";
 
-    // --- Updated Worker URL to working now.gg endpoint ---
     let url=`https://steep-truth-aa08.mhvanheste.workers.dev/?url=https://now.gg/accounts/users/v1/userinfo?locale=${window.language}`;
     url += window.utmParamsStr;
 
@@ -160,7 +167,7 @@ if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId &
     });
 }
 
-// --- Service Worker ---
+// Service Worker
 window.isLocalhost = /^(localhost|127\.0\.0\.1|::1)$/.test(window.location.hostname);
 if("serviceWorker" in navigator){
     window.addEventListener("load",()=>{
@@ -170,7 +177,7 @@ if("serviceWorker" in navigator){
     });
 }
 
-// --- Polyfill for replaceAll ---
+// Polyfill replaceAll
 if(!String.prototype.replaceAll){
     String.prototype.replaceAll=function(str,newStr){
         if(Object.prototype.toString.call(str).toLowerCase()==="[object regexp]") return this.replace(str,newStr);
@@ -179,7 +186,6 @@ if(!String.prototype.replaceAll){
 }
 </script>
 
-<!-- --- Load JS & CSS Assets --- -->
 <link rel="stylesheet" href="play/style.css">
 <script src="play/vendors_app.ae4a4a45.chunk.js"></script>
 <script src="play/app.af8c356a.js"></script>
@@ -187,21 +193,22 @@ if(!String.prototype.replaceAll){
 <title>Play Roblox Online™</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,shrink-to-fit=no,maximum-scale=1,user-scalable=no"/>
 </head>
+
 <body>
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PRM8BWR" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="app">
+
+    <!-- ⭐ NEW — REQUIRED ORIENTATION ELEMENTS ⭐ -->
+    <div id="orientation-wrapper">
+        <div id="portrait-block"></div>
+        <div id="landscape-block"></div>
+    </div>
+
     <div class="snackbar"></div>
     <div id="loader"><img class="loaderImage" alt="loaderImg" src="play/images/loader.svg"/></div>
-
-    <!-- Dummy elements to prevent JS crashes -->
-    <div id="game-container"></div>
-    <div id="ad-slot-top"></div>
-    <div id="ad-slot-bottom"></div>
-    <div id="in-game-ui"></div>
 </div>
 
-<!-- Favicon & logo -->
 <script>
 const favIcon = window.isWhiteLabelledApp ? "nutaku_favicon.ico":"favicon.ico";
 const link = document.createElement('link');
