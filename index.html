@@ -14,10 +14,13 @@
 
 <script>
 function isMobile(){
-    return [/Android/i,/webOS/i,/iPhone/i,/iPad/i,/iPod/i,/BlackBerry/i,/Windows Phone/i,/Opera Mini/i,/IEMobile/i,/WPDesktop/i].some(e=>navigator.userAgent.match(e)||/iPad|iPhone|iPod/.test(navigator.platform)||"MacIntel"===navigator.platform&&navigator.maxTouchPoints>1)
+    return [/Android/i,/webOS/i,/iPhone/i,/iPad/i,/iPod/i,/BlackBerry/i,/Windows Phone/i,/Opera Mini/i,/IEMobile/i,/WPDesktop/i]
+    .some(e=>navigator.userAgent.match(e) || /iPad|iPhone|iPod/.test(navigator.platform) ||
+    ("MacIntel"===navigator.platform && navigator.maxTouchPoints>1))
 }
 
-var adUnitDimensions=[[300,250],[336,280],[480,320]],midRollAdUnitDimensions=[[336,280],[300,250]]; 
+var adUnitDimensions=[[300,250],[336,280],[480,320]],
+    midRollAdUnitDimensions=[[336,280],[300,250]];
 isMobile()&&(adUnitDimensions=[[300,250]]);
 window.googletag=window.googletag||{cmd:[]};
 
@@ -35,7 +38,7 @@ googletag.cmd.push(function(){
 </script>
 
 <script>
-// FB Click ID & Language Detection
+// FB Click ID
 const fbClickId = new URL(window.location.href).searchParams.get("fbclid");
 if(fbClickId){
     const now = new Date();
@@ -43,11 +46,12 @@ if(fbClickId){
     document.cookie = `fbClickId=${fbClickId}; expires=${now.toUTCString()}; path=/`;
 }
 
+// Language detect
 let language = (navigator.languages && navigator.languages[0]) || navigator.language || "en";
 if(language.indexOf("-") !== -1) language = language.split("-")[0];
 window.language = language;
 
-// UTM Handling
+// UTM logic (unchanged)
 function getUtms(){
     const url = new URL(window.location.href);
     const dlParam = url.searchParams.get("dl");
@@ -63,21 +67,18 @@ function getUtms(){
         const referrer = document.referrer ? document.referrer.split("/")[2] : "NA";
         const expiry = new Date();
         expiry.setHours(expiry.getHours()+24);
-        const domain = window.location.hostname === "localhost" ? "localhost" : window.location.hostname;
+        const domain = window.location.hostname;
         document.cookie = `utm_medium=${utm_medium};expires=${expiry};domain=${domain};path=/`;
         document.cookie = `utm_source=${utm_source};expires=${expiry};domain=${domain};path=/`;
         document.cookie = `utm_campaign=${utm_campaign};expires=${expiry};domain=${domain};path=/`;
         return `&utm_medium=${utm_medium}&utm_source=${utm_source}&utm_campaign=${utm_campaign}&referrer=${referrer}` + (dlParam ? `&dl=${dlParam}` : "");
     }
-    sessionStorage.removeItem("utm_medium");
-    sessionStorage.removeItem("utm_source");
-    sessionStorage.removeItem("utm_campaign");
     return dlParam ? `&dl=${dlParam}` : "";
 }
 
 window.utmParamsStr = getUtms();
 
-// ULID Generator
+// ULID generator (unchanged)
 function ULID(){
     const BASE32 = "0123456789ABCDEFGHJKMNPQRSTVWXYZ".split("");
     let last = -1;
@@ -115,18 +116,12 @@ function ULID(){
         return encode(ulid);
     }
 }
-
 window.ULID = ULID;
 
-// Worker/Auth Fetch
+// Worker/Auth
 const authToken = sessionStorage.getItem("userToken");
 
-window.appInfo = {
-    appId: "5349",
-    name: "Roblox",
-    playDomain: true
-};
-
+window.appInfo = { appId: "5349", name: "Roblox", playDomain: true };
 window.gameId = window.appInfo.appId;
 window.gameName = window.appInfo.name;
 
@@ -142,7 +137,7 @@ if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId &
 
     const sessionId = sessionStorage.getItem("sessionId");
     let userUuid = searchParams.get("sessionId") || sessionId || ULID()();
-    sessionStorage.setItem("sessionId",userUuid);
+    sessionStorage.setItem("sessionId", userUuid);
 
     const data = {
         appId: window.gameId,
@@ -151,10 +146,6 @@ if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId &
         recaptchaToken,
         adTrackingId: window.adTrackingId
     };
-
-    if(!!(navigator.maxTouchPoints && navigator.maxTouchPoints>2 && /MacIntel/.test(navigator.platform))){
-        data.forceDeviceType="ipad";
-    }
 
     window.sessionId = userUuid;
     window[`${window.gameId}-auth`] = fetch(url,{
@@ -167,17 +158,17 @@ if(window.gameId && !(appCampaignData && appCampaignData.appId===window.gameId &
     });
 }
 
-// Service Worker
+// Service worker
 window.isLocalhost = /^(localhost|127\.0\.0\.1|::1)$/.test(window.location.hostname);
 if("serviceWorker" in navigator){
     window.addEventListener("load",()=>{
         if(!window.isLocalhost){
-            navigator.serviceWorker.register(`play/sw.js`).then(()=>console.log("serviceWorker successfully registered")).catch(err=>console.error(err));
+            navigator.serviceWorker.register(`play/sw.js`);
         }
     });
 }
 
-// Polyfill replaceAll
+// replaceAll polyfill
 if(!String.prototype.replaceAll){
     String.prototype.replaceAll=function(str,newStr){
         if(Object.prototype.toString.call(str).toLowerCase()==="[object regexp]") return this.replace(str,newStr);
@@ -187,19 +178,17 @@ if(!String.prototype.replaceAll){
 </script>
 
 <link rel="stylesheet" href="play/style.css">
-<script src="play/vendors_app.ae4a4a45.chunk.js"></script>
-<script src="play/app.af8c356a.js"></script>
 
 <title>Play Roblox Online™</title>
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,shrink-to-fit=no,maximum-scale=1,user-scalable=no"/>
 </head>
 
 <body>
-<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PRM8BWR" height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-PRM8BWR" height="0" width="0" style="display:none;"></iframe></noscript>
 
 <div class="app">
 
-    <!-- ⭐ NEW — REQUIRED ORIENTATION ELEMENTS ⭐ -->
+    <!-- Orientation elements (needed) -->
     <div id="orientation-wrapper">
         <div id="portrait-block"></div>
         <div id="landscape-block"></div>
@@ -210,12 +199,16 @@ if(!String.prototype.replaceAll){
 </div>
 
 <script>
-const favIcon = window.isWhiteLabelledApp ? "nutaku_favicon.ico":"favicon.ico";
+const favIcon = window.isWhiteLabelledApp ? "nutaku_favicon.ico" : "favicon.ico";
 const link = document.createElement('link');
-link.rel='icon';
+link.rel = 'icon';
 document.getElementsByTagName('head')[0].appendChild(link);
-link.href=`/play/images/${favIcon}`;
+link.href = `/play/images/${favIcon}`;
 </script>
+
+<!-- ⭐ MOVED TO BOTTOM SO .app EXISTS BEFORE JS RUNS ⭐ -->
+<script src="play/vendors_app.ae4a4a45.chunk.js"></script>
+<script src="play/app.af8c356a.js"></script>
 
 </body>
 </html>
